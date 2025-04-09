@@ -58,11 +58,12 @@ public class AccountController {
 	public Account softDeleteAccount(@RequestParam int accId) {
 	    return accountService.softDeleteAccount(accId);
 	}
-	 @GetMapping("/accounts/{id}/balance")
-    public ResponseEntity<BigDecimal> getAccountBalance(@PathVariable int id) {
-        BigDecimal balance = accountService.getAccountBalance(id);
-        return ResponseEntity.ok(balance);
-    }
+	@GetMapping("/accounts/{accId}")
+public ResponseEntity<Account> fetchAccountById(@PathVariable int accId) {
+    Account account = accountService.fetchAccountById(accId);
+    return ResponseEntity.ok(account);
+}
+
 
 	
 

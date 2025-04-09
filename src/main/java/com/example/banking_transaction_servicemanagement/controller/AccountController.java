@@ -68,6 +68,11 @@ public List<Account> getAllAccounts() {
     return accountService.getAllAccounts();
 }
 
+@DeleteMapping("/accounts/{accountId}")
+public ResponseEntity<String> suspendAccount(@PathVariable int accountId) {
+    accountService.suspendAccount(accountId);
+    return ResponseEntity.ok("Account suspended successfully.");
+}
 
 }
 

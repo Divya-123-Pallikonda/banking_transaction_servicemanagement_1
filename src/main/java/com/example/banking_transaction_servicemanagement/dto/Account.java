@@ -69,5 +69,6 @@ public class Account {
 	public BigDecimal getBalance() {
     return this.balance;
 }
+	
 
 }

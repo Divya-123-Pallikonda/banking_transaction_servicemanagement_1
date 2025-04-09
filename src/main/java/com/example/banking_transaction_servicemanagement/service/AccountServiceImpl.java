@@ -13,6 +13,8 @@ import java.math.BigDecimal;
 
 import com.example.banking_transaction_servicemanagement.exception.ResourceNotFoundException;
 import com.example.banking_transaction_servicemanagement.repo.AccountRepo;
+import org.springframework.transaction.annotation.Transactional;
+
 
 
 
@@ -67,7 +69,14 @@ public class AccountServiceImpl implements AccountService {
 public List<Account> getAllAccounts() {
     return accountRepo.findAll();
 }
+	@Transactional
+public void suspendAccount(int accountId) {
+    accountRepo.softDeleteById(accountId);
 }
+
+}
+
+
 
 
 

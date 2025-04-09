@@ -4,6 +4,7 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
 
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -49,8 +50,11 @@ public class TransactionController {
     }
 
     @PostMapping("/makeTransaction")
-    public TransactionResponse makeTransaction(@RequestParam int accId, @RequestBody TransactionRequest request) {
-        return transactionService.makeTransaction(accId, request);
+    public ResponseEntity<TransactionResponse> makeTransaction(
+            @RequestParam int accId,
+            @Valid @RequestBody TransactionRequest request) {
+        TransactionResponse response = transactionService.makeTransaction(accId, request);
+        return ResponseEntity.ok(response);
     }
 
     @PatchMapping("/linkTransactionToAccount")
@@ -67,38 +71,26 @@ public class TransactionController {
     }
 
     @GetMapping("/accounts/{accountId}/transactions")
-    public Page<Transaction> getTransactions(
+    public ResponseEntity<Page<Transaction>> getTransactionHistory(
             @PathVariable Long accountId,
             @RequestParam(required = false) String type,
-            @RequestParam(required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate fromDate,
-            @RequestParam(required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate toDate,
+            @RequestParam(required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate startDate,
+            @RequestParam(required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate endDate,
             @PageableDefault(size = 10) Pageable pageable) {
-        return transactionService.getTransactions(accountId, type, fromDate, toDate, pageable);
+        Page<Transaction> transactions = transactionService.getTransactionHistory(accountId, type, startDate, endDate, pageable);
+        return ResponseEntity.ok(transactions);
     }
-   @GetMapping("/accounts/{accountId}/transactions")
-public ResponseEntity<Page<Transaction>> getTransactionHistory(
-        @PathVariable Long accountId,
-        @RequestParam(required = false) String type,
-        @RequestParam(required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate startDate,
-        @RequestParam(required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate endDate,
-        @PageableDefault(size = 10) Pageable pageable) {
-    
-    Page<Transaction> transactions = transactionService.getTransactionHistory(accountId, type, startDate, endDate, pageable);
-    return ResponseEntity.ok(transactions);
-}
-@GetMapping("/accounts/{accountId}/transactions")
-public ResponseEntity<Page<Transaction>> getTransactionsByAccountWithFilters(
-        @PathVariable int accountId,
-        @RequestParam(required = false) String type,
-        @RequestParam(required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDateTime start,
-        @RequestParam(required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDateTime end,
-        @RequestParam(defaultValue = "0") int page,
-        @RequestParam(defaultValue = "10") int size
-) {
-    Page<Transaction> transactions = transactionService.getTransactionsByAccountWithFilters(
-            accountId, type, start, end, page, size);
-    return ResponseEntity.ok(transactions);
-}
 
-
+    @GetMapping("/accounts/{accountId}/filter")
+    public ResponseEntity<Page<Transaction>> getTransactionsByAccountWithFilters(
+            @PathVariable int accountId,
+            @RequestParam(required = false) String type,
+            @RequestParam(required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDateTime start,
+            @RequestParam(required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDateTime end,
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "10") int size) {
+        Page<Transaction> transactions = transactionService.getTransactionsByAccountWithFilters(
+                accountId, type, start, end, page, size);
+        return ResponseEntity.ok(transactions);
+    }
 }

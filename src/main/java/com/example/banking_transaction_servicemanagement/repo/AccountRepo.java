@@ -23,4 +23,7 @@ public interface AccountRepo extends JpaRepository<Account, Integer> {
     // Custom method to find accounts with balance greater than a specified value
     @Query("SELECT a FROM Account a WHERE a.balance > ?1")
     List<Account> findAccountsWithBalanceGreaterThan(Double balance);
+    
 }
+
+

@@ -75,4 +75,16 @@ public class TransactionController {
             @PageableDefault(size = 10) Pageable pageable) {
         return transactionService.getTransactions(accountId, type, fromDate, toDate, pageable);
     }
+   @GetMapping("/accounts/{accountId}/transactions")
+public ResponseEntity<Page<Transaction>> getTransactionHistory(
+        @PathVariable Long accountId,
+        @RequestParam(required = false) String type,
+        @RequestParam(required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate startDate,
+        @RequestParam(required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate endDate,
+        @PageableDefault(size = 10) Pageable pageable) {
+    
+    Page<Transaction> transactions = transactionService.getTransactionHistory(accountId, type, startDate, endDate, pageable);
+    return ResponseEntity.ok(transactions);
+}
+
 }

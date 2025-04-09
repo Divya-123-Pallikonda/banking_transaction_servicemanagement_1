@@ -64,7 +64,9 @@ public class AccountServiceImpl implements AccountService {
         .orElseThrow(() -> new ResourceNotFoundException("Account not found"));
     return account.getBalance();
 }
-
+public List<Account> getAllAccounts() {
+    return accountRepo.findAll();
+}
 }
 
 

@@ -120,5 +120,43 @@ public Page<Transaction> getTransactionsByAccountWithFilters(
     Pageable pageable = PageRequest.of(page, size, Sort.by("timestamp").descending());
     return transactionRepo.findByAccountWithFilters(accountId, type, start, end, pageable);
 }
+@Transactional
+public TransactionResponse makeTransaction(int accId, @Valid TransactionRequest request) {
+    Account account = accountDao.fetchAccountById(accId);
+    if (account == null || !account.getActive()) {
+        throw new AccountNotFoundException("Invalid or inactive account");
+    }
+
+    BigDecimal amount = request.getAmount();
+
+    if ("debit".equalsIgnoreCase(request.getType())) {
+        if (account.getBalance().compareTo(amount) < 0) {
+            throw new RuntimeException("Insufficient balance for debit transaction");
+        }
+        account.setBalance(account.getBalance().subtract(amount));
+    } else if ("credit".equalsIgnoreCase(request.getType())) {
+        account.setBalance(account.getBalance().add(amount));
+    } else {
+        throw new RuntimeException("Invalid transaction type: must be 'credit' or 'debit'");
+    }
+
+    Transaction transaction = new Transaction();
+    transaction.setAccount(account);
+    transaction.setAmount(amount.doubleValue());
+    transaction.setType(request.getType().toLowerCase());
+    transaction.setTimestamp(request.getTimestamp() != null ? request.getTimestamp() : LocalDateTime.now());
+    transaction.setStatus("success");
+
+    accountDao.saveAccount(account);
+    transaction = transactionDao.saveTransaction(transaction);
+
+    return new TransactionResponse(
+            transaction.getTid(),
+            transaction.getAmount(),
+            transaction.getType(),
+            transaction.getTimestamp(),
+            transaction.getStatus()
+    );
+}
 
 }

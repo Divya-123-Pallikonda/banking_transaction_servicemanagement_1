@@ -53,6 +53,12 @@ public class AccountServiceImpl implements AccountService {
 	        
 	        return accountDao.saveAccount(account); 
 	    }
+	public BigDecimal getAccountBalance(Long id) {
+    Account account = accountRepository.findById(id)
+        .orElseThrow(() -> new ResourceNotFoundException("Account not found"));
+    return account.getBalance();
+}
+
 	}
 
 

@@ -13,7 +13,8 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
-
+import java.math.BigDecimal;
+import org.springframework.web.bind.annotation.PathVariable;
 import com.example.banking_transaction_servicemanagement.dto.Account;
 import com.example.banking_transaction_servicemanagement.request.CreateAccountRequest;
 import com.example.banking_transaction_servicemanagement.service.AccountService;
@@ -57,11 +58,11 @@ public class AccountController {
 	public Account softDeleteAccount(@RequestParam int accId) {
 	    return accountService.softDeleteAccount(accId);
 	}
-	@GetMapping("/accounts/{id}/balance")
-public ResponseEntity<BigDecimal> getAccountBalance(@PathVariable Long id) {
-    BigDecimal balance = accountService.getAccountBalance(id);
-    return ResponseEntity.ok(balance);
-}
+	 @GetMapping("/accounts/{id}/balance")
+    public ResponseEntity<BigDecimal> getAccountBalance(@PathVariable int id) {
+        BigDecimal balance = accountService.getAccountBalance(id);
+        return ResponseEntity.ok(balance);
+    }
 
 	
 

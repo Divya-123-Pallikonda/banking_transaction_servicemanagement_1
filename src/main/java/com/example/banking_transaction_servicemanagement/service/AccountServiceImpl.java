@@ -9,6 +9,11 @@ import org.springframework.stereotype.Service;
 import com.example.banking_transaction_servicemanagement.dao.AccountDao;
 import com.example.banking_transaction_servicemanagement.dto.Account;
 import com.example.banking_transaction_servicemanagement.request.CreateAccountRequest;
+import java.math.BigDecimal;
+
+import com.example.banking_transaction_servicemanagement.exception.ResourceNotFoundException;
+import com.example.banking_transaction_servicemanagement.repo.AccountRepo;
+
 
 
 @Service
@@ -16,7 +21,8 @@ public class AccountServiceImpl implements AccountService {
 
 	@Autowired
 	  AccountDao accountDao;
-	
+	@Autowired 
+	AccountRepo accountRepo;
 
 	public Account saveAccount(Account account) {
         return accountDao.saveAccount(account);
@@ -53,10 +59,12 @@ public class AccountServiceImpl implements AccountService {
 	        
 	        return accountDao.saveAccount(account); 
 	    }
-	public BigDecimal getAccountBalance(Long id) {
+	public BigDecimal getAccountBalance(int id) {
     Account account = accountRepository.findById(id)
         .orElseThrow(() -> new ResourceNotFoundException("Account not found"));
     return account.getBalance();
+}
+
 }
 
 

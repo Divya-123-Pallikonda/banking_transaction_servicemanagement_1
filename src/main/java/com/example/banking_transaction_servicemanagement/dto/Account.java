@@ -66,5 +66,8 @@ public class Account {
 	public void setActive(Boolean active) {
 		this.active = active;
 	}
-	
+	public BigDecimal getBalance() {
+    return this.balance;
+}
+
 }

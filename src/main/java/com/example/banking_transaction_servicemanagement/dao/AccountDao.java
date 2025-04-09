@@ -44,5 +44,12 @@ public class AccountDao {
         account.setActive(false);
         return accountRepo.save(account);
     }
-   
+    public BigDecimal getAccountBalance(int accId) {
+    Account account = fetchAccountById(accId);
+    return account.getBalance();
 }
+
+}
+
+   
+

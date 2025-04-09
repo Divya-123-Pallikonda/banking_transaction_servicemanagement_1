@@ -63,7 +63,13 @@ public ResponseEntity<Account> fetchAccountById(@PathVariable int accId) {
     Account account = accountService.fetchAccountById(accId);
     return ResponseEntity.ok(account);
 }
+@GetMapping("/accounts")
+public List<Account> getAllAccounts() {
+    return accountService.getAllAccounts();
+}
 
+
+}
 
 	
 

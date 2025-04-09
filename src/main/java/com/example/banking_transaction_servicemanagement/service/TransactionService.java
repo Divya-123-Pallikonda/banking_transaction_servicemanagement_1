@@ -111,4 +111,8 @@ public class TransactionService {
         Pageable pageable = PageRequest.of(page, size);
         return transactionRepo.findFiltered(accountId, type, startDate, endDate, pageable);
     }
+    public Page<Transaction> getTransactionHistory(Long accountId, String type, LocalDate startDate, LocalDate endDate, Pageable pageable) {
+    return transactionRepo.findByFilters(accountId, type, startDate, endDate, pageable);
+}
+
 }

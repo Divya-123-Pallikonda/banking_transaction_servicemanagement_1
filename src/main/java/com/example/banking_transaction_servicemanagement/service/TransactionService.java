@@ -103,7 +103,7 @@ public class TransactionService  {
 }
 	public Page<Transaction> getTransactions(Long accountId, int page, int size, String type, LocalDate startDate, LocalDate endDate) {
     Pageable pageable = PageRequest.of(page, size);
-    return transactionRepository.findFiltered(accountId, type, startDate, endDate, pageable);
+    return transactionRepo.findFiltered(accountId, type, startDate, endDate, pageable);
 }
 
 }

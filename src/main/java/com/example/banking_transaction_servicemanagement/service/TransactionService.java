@@ -101,5 +101,10 @@ public class TransactionService  {
 		        return transactionDao.getFilteredTransactions(type, start, end);
 
 }
+	public Page<Transaction> getTransactions(Long accountId, int page, int size, String type, LocalDate startDate, LocalDate endDate) {
+    Pageable pageable = PageRequest.of(page, size);
+    return transactionRepository.findFiltered(accountId, type, startDate, endDate, pageable);
+}
+
 }
 

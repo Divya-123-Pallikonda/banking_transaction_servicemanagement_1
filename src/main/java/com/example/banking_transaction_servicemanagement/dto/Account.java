@@ -11,8 +11,9 @@ public class Account {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int accId;
-
+   
+@Column(name = "is_active")
+ private int accId;
     private String accountHolderName;
     private String email;
     private String phoneNumber;
@@ -79,4 +80,5 @@ public class Account {
     public void setActive(Boolean active) {
         this.active = active;
     }
+
 }

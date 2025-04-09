@@ -86,5 +86,19 @@ public ResponseEntity<Page<Transaction>> getTransactionHistory(
     Page<Transaction> transactions = transactionService.getTransactionHistory(accountId, type, startDate, endDate, pageable);
     return ResponseEntity.ok(transactions);
 }
+@GetMapping("/accounts/{accountId}/transactions")
+public ResponseEntity<Page<Transaction>> getTransactionsByAccountWithFilters(
+        @PathVariable int accountId,
+        @RequestParam(required = false) String type,
+        @RequestParam(required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDateTime start,
+        @RequestParam(required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDateTime end,
+        @RequestParam(defaultValue = "0") int page,
+        @RequestParam(defaultValue = "10") int size
+) {
+    Page<Transaction> transactions = transactionService.getTransactionsByAccountWithFilters(
+            accountId, type, start, end, page, size);
+    return ResponseEntity.ok(transactions);
+}
+
 
 }

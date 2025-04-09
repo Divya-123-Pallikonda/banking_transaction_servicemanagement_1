@@ -69,5 +69,17 @@ public class TransactionController {
 
 	        return transactionService.getFilteredTransactions(type, start, end);
 	    }
+@GetMapping("/accounts/{id}/transactions")
+public ResponseEntity<Page<Transaction>> getTransactions(
+        @PathVariable Long id,
+        @RequestParam(defaultValue = "0") int page,
+        @RequestParam(defaultValue = "10") int size,
+        @RequestParam(required = false) String type,
+        @RequestParam(required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate startDate,
+        @RequestParam(required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate endDate) {
+
+    Page<Transaction> transactions = transactionService.getTransactions(id, page, size, type, startDate, endDate);
+    return ResponseEntity.ok(transactions);
+}
 
 }
